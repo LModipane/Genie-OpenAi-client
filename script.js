@@ -14,7 +14,7 @@ function generateChatStripe(isAi, value, uniqueId) {
     <div class="wrapper ${isAi && 'ai'}">
       <div class="chat">
         <div class="profile">
-          <img src=${isAi ? "man-genie.svg" :"opsgenie.svg"} alt="send" />
+          <img src=${isAi ? 'man-genie.svg' : 'opsgenie.svg'} alt="send" />
         </div>
         <div class="message" id=${uniqueId}>
           ${value}
@@ -40,6 +40,32 @@ const handleSubmit = async event => {
 	//load message in bot chat
 	const botMessage = document.getElementById(messageId);
 	loadMessage(botMessage);
+  textArea.value = "";
+
+	//fetch data from server
+
+	const responce = await fetch(`http://localhost:5000`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			prompt: data.get('prompt'),
+		}),
+	});
+
+	clearInterval(loadinterval);
+	botMessage.innerHTML = '';
+
+	if (responce.ok) {
+		const data = await responce.json();
+		const parsedData = data.bot.trim();
+		typeMessage(botMessage, parsedData);
+	} else {
+		const err = await responce.text();
+		botMessage.innerHTML = 'Opps, Something went wrong!!';
+		alert(err);
+  }
 };
 
 function loadMessage(element) {
@@ -59,11 +85,11 @@ form.addEventListener('keyup', event => {
 	}
 });
 
-function testMessage(element, text) {
+function typeMessage(element, text) {
 	let index = 0;
 
 	let interval = setInterval(() => {
-		if (index > text.length) {
+		if (index < text.length) {
 			element.innerHTML += text.charAt(index);
 			index += 1;
 		} else {
