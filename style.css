@@ -65,9 +65,10 @@ body {
 }
 
 .profile {
-	width: 36px;
-	height: 36px;
+	width: 46px;
+	height: 46px;
 	border-radius: 5px;
+	margin: auto;
 
 	background: #5436da;
 
@@ -81,14 +82,13 @@ body {
 }
 
 .profile img {
-	width: 60%;
-	height: 60%;
+	width: 80%;
+	height: 80%;
 	object-fit: contain;
 }
 
 .message {
 	flex: 1;
-
 	color: #dcdcdc;
 	font-size: 20px;
 
